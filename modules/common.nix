@@ -34,8 +34,11 @@
 
       if [ ! -d "$REPO_DIR" ]; then
         echo "Cloning NixPi repo..."
-        git clone https://github.com/B4nn4n4/NixPi.git "$REPO_DIR"
+        sudo git clone https://github.com/B4nn4n4/NixPi.git "$REPO_DIR"
       fi
+
+      echo "Setting repo ownership..."
+      sudo chown -R "$USER":"$USER" "$REPO_DIR"
 
       echo "Pulling latest changes..."
       git -C "$REPO_DIR" pull --ff-only
