@@ -38,7 +38,7 @@
       fi
 
       echo "Setting repo ownership..."
-      sudo chown -R "$USER":"$USER" "$REPO_DIR"
+      sudo chown -R "$USER" "$REPO_DIR"
 
       echo "Pulling latest changes..."
       git -C "$REPO_DIR" pull --ff-only
