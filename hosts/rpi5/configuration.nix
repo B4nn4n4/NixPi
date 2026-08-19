@@ -21,6 +21,9 @@
     };
   };
 
+  # Create the volume dir for the Anytype container (podman bind-mount source)
+  systemd.tmpfiles.rules = [ "d /var/lib/anytype 0755 root root -" ];
+
   # Anytype Sync Server (any-sync-bundle)
   virtualisation.oci-containers = {
     backend = "podman";
@@ -29,7 +32,7 @@
       ports = [ "33010:33010" "33020:33020/udp" ];
       volumes = [ "/var/lib/anytype:/data" ];
       environment = {
-        ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS = "";
+        ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS = "10.1.1.12";
       };
       autoStart = true;
     };
