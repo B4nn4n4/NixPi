@@ -4,15 +4,18 @@
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = true;
-      PermitRootLogin = "yes";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
     };
   };
 
   users.users.nixos = {
     isNormalUser = true;
-    password = "nixos";
     extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIHMegvyvZgDLbOGebJrQVMtY46qwIL3385EmnGdAr/LYAAAABHNzaDo= fabian@AlienSpaceShip"
+    ];
   };
 
   nix = {
