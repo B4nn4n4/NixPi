@@ -38,6 +38,35 @@
     };
   };
 
+  # Pi-hole (DNS-only; DHCP stays on the router)
+  services.pihole-ftl = {
+    enable = true;
+    openFirewallDNS = true;
+    openFirewallWebserver = true;
+    queryLogDeleter.enable = true;
+    lists = [
+      {
+        url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
+        description = "Steven Black unified adlist";
+      }
+    ];
+    settings = {
+      dns = {
+        upstreams = [
+          "1.1.1.2"
+          "9.9.9.9"
+        ];
+        revServers = [ "true,10.1.1.0/24,10.1.1.1" ];
+      };
+      webserver.api.cli_pw = true;
+    };
+  };
+
+  services.pihole-web = {
+    enable = true;
+    ports = [ 80 ];
+  };
+
   # Firewall
   networking.firewall = {
     allowedTCPPorts = [ 8123 33010 ];
