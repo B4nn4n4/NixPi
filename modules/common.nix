@@ -35,7 +35,7 @@
     (pkgs.writeShellScriptBin "nixpi-rebuild" ''
       set -euo pipefail
       REPO_DIR="/etc/nixos/NixPi"
-      FLAKE_ATTR="rpi5"
+      FLAKE_ATTR="$(hostname)"
 
       if [ ! -d "$REPO_DIR" ]; then
         echo "Cloning NixPi repo..."

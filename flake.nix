@@ -26,6 +26,7 @@
           {
             boot.supportedFilesystems.zfs = lib.mkForce false;
           })
+        ./modules/common.nix
       ] ++ modules;
     };
   in
@@ -34,7 +35,6 @@
       rpi3 = mkPi {
         modules = [
           nixos-raspberrypi.nixosModules.raspberry-pi-3.base
-          ./modules/common.nix
           ./hosts/rpi3/configuration.nix
         ];
       };
@@ -42,15 +42,17 @@
       rpi5 = mkPi {
         modules = [
           nixos-raspberrypi.nixosModules.raspberry-pi-5.base
-          ./modules/common.nix
           ./hosts/rpi5/configuration.nix
         ];
       };
     };
 
-    packages.aarch64-linux = {
+    packages = nixpkgs.lib.genAttrs [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] (_: {
       rpi3-image = self.nixosConfigurations.rpi3.config.system.build.sdImage;
       rpi5-image = self.nixosConfigurations.rpi5.config.system.build.sdImage;
-    };
+    });
   };
 }

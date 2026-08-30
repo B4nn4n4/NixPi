@@ -3,24 +3,6 @@
 {
   networking.hostName = "rpi5";
 
-  # Home Assistant
-  services.home-assistant = {
-    enable = true;
-    extraComponents = [
-      "analytics"
-      "met"
-      "radio_browser"
-      "isal"
-    ];
-    config = {
-      default_config = {};
-      http = {
-        server_port = 8123;
-        trusted_proxies = [ "127.0.0.1" "::1" ];
-      };
-    };
-  };
-
   # Create the volume dir for the Anytype container (podman bind-mount source)
   systemd.tmpfiles.rules = [ "d /var/lib/anytype 0755 root root -" ];
 
@@ -69,7 +51,7 @@
 
   # Firewall
   networking.firewall = {
-    allowedTCPPorts = [ 8123 33010 ];
+    allowedTCPPorts = [ 33010 ];
     allowedUDPPorts = [ 33020 ];
   };
 }
