@@ -11,6 +11,7 @@
       "met"
       "radio_browser"
       "isal"
+      "google_translate"
     ];
     config = {
       default_config = {};
