@@ -25,7 +25,6 @@
       };
       http = {
         server_port = 8123;
-        trusted_proxies = [ "127.0.0.1" "::1" ];
       };
     };
   };
@@ -48,6 +47,8 @@
 
   # Firewall
   networking.firewall = {
-    allowedTCPPorts = [ 8123 1883 ];
+    allowedTCPPorts = [ 8123 1883 21063 ];
+    # HomeKit bridge needs mDNS discovery on 5353/udp.
+    allowedUDPPorts = [ 5353 ];
   };
 }

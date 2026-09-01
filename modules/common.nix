@@ -42,6 +42,20 @@
     };
   };
 
+  # Mitigate OOM on low-RAM Pis (Home Assistant on rpi3 needs >1GB).
+  zramSwap = {
+    enable = true;
+    memoryPercent = 100;
+    algorithm = "zstd";
+    priority = 100;
+  };
+
+  systemd.oomd = {
+    enable = true;
+    enableRootSlice = true;
+    enableSystemSlice = true;
+  };
+
   environment.systemPackages = with pkgs; [
     git
     (pkgs.writeShellScriptBin "nixpi-rebuild" ''
