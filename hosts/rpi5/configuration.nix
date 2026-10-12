@@ -39,7 +39,7 @@
       ports = [ "33010:33010" "33020:33020/udp" ];
       volumes = [ "/var/lib/anytype:/data" ];
       environment = {
-        ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS = "10.1.1.12";
+        ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS = "192.168.1.122";
       };
       autoStart = true;
     };
@@ -63,7 +63,7 @@
           "1.1.1.2"
           "9.9.9.9"
         ];
-        revServers = [ "true,10.1.1.0/24,10.1.1.1" ];
+        revServers = [ "true,192.168.1.0/24,192.168.1.1" ];
       };
       webserver.api.cli_pw = true;
     };
