@@ -3,6 +3,9 @@
 {
   networking.hostName = "rpi5";
 
+  # Home Assistant Container + Mosquitto, shared with rpi3.
+  imports = [ ../../modules/home-assistant.nix ];
+
   # Raspberry Pis have no battery-backed RTC (boots at 1970), so Anytype
   # x509 certs fail ("not yet valid") until NTP syncs. Force explicit NTP
   # servers and delay anytype until time-sync.target is reached.
