@@ -10,7 +10,11 @@
   # Persistent storage for Home Assistant container config (/config inside container).
   # A fresh host starts at HA onboarding. To seed it from an existing instance,
   # untar a backup into this directory before first start.
-  systemd.tmpfiles.rules = [ "d /var/lib/home-assistant 0755 root root -" ];
+  systemd.tmpfiles.rules = [
+    "d /var/lib/home-assistant 0755 root root -"
+    # Homebridge state (config.json, plugins, accessory cache, pairings).
+    "d /var/lib/homebridge 0755 root root -"
+  ];
 
   # Home Assistant Container (upstream image, replaces services.home-assistant /
   # HA Core which is unsupported since 2025.12). No Supervisor / Add-on Store in
@@ -33,6 +37,23 @@
         "--network=host"
         # Uncomment to pass a Zigbee/Z-Wave stick through when needed:
         # "--device=/dev/ttyACM0:/dev/ttyACM0"
+      ];
+      autoStart = true;
+    };
+
+    # Homebridge: sibling container for devices that only have a Homebridge
+    # plugin. Configure it in the web UI on :8581 (first login creates the
+    # admin user). Separate from HA's own HomeKit Bridge on 21063.
+    containers.homebridge = {
+      # Pin like HA above; tags are release dates.
+      image = "docker.io/homebridge/homebridge:2026-10-16";
+      volumes = [ "/var/lib/homebridge:/homebridge" ];
+      environment = {
+        TZ = "Europe/Berlin";
+      };
+      extraOptions = [
+        # Host network for mDNS/Bonjour advertisement, same as HA.
+        "--network=host"
       ];
       autoStart = true;
     };
@@ -77,7 +98,11 @@
 
   # Firewall
   networking.firewall = {
-    allowedTCPPorts = [ 8123 1883 21063 ];
+    # 8581 = Homebridge UI, 51826 = Homebridge main bridge.
+    allowedTCPPorts = [ 8123 1883 21063 8581 51826 ];
+    # Homebridge child bridges; set "ports": { "start": 52100, "end": 52150 }
+    # in Homebridge config.json so they stay inside this range.
+    allowedTCPPortRanges = [ { from = 52100; to = 52150; } ];
     # HomeKit bridge needs mDNS discovery on 5353/udp.
     allowedUDPPorts = [ 5353 ];
   };
